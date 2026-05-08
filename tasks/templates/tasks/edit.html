@@ -1,0 +1,22 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+<h3 class="mb-4">Редактировать задачу</h3>
+
+<form method="post" class="card p-4 shadow-sm">
+    {% csrf_token %}
+
+    <input type="text" name="title" value="{{ task.title }}" class="form-control mb-3">
+
+    <select name="status" class="form-control mb-3">
+        <option value="new" {% if task.status == 'new' %}selected{% endif %}>Новая</option>
+        <option value="progress" {% if task.status == 'progress' %}selected{% endif %}>В работе</option>
+        <option value="done" {% if task.status == 'done' %}selected{% endif %}>Завершена</option>
+    </select>
+
+    <button type="submit" class="btn btn-success">Сохранить</button>
+
+</form>
+
+{% endblock %}
