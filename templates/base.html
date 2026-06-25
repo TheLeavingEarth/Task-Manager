@@ -5,9 +5,10 @@
     <meta charset="UTF-8">
     <title>Мои задачи</title>
 
-```
+{% load static %}
+<link rel="stylesheet" href="{% static 'css/style.css' %}">
 <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-```
+
 
 </head>
 <body>
@@ -18,17 +19,19 @@
     <div class="container">
         <a class="navbar-brand" href="/">Task Manager</a>
 
-```
+
     <div class="ms-auto">
         {% if user.is_authenticated %}
             <span class="text-white me-3">👤 {{ user.username }}</span>
-            <a href="{% url 'logout' %}" class="btn btn-outline-light btn-sm">Выйти</a>
+            <form action="{% url 'logout' %}" method="post" class="d-inline">
+    {% csrf_token %}
+    <button type="submit" class="btn btn-outline-light btn-sm">Выйти</button>
+</form>
         {% else %}
             <a href="{% url 'login' %}" class="btn btn-outline-light btn-sm">Войти</a>
         {% endif %}
     </div>
 </div>
-```
 
 </nav>
 
