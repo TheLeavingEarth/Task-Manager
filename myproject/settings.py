@@ -46,6 +46,10 @@ TEMPLATES = [
     },
 ]
 
+CSRF_TRUSTED_ORIGINS = [
+    "https://task-manager-rgvo.onrender.com"
+]
+
 WSGI_APPLICATION = 'myproject.wsgi.application'
 
 DATABASES = {
