@@ -4,8 +4,8 @@ from pathlib import Path
 BASE_DIR = Path(__file__).resolve().parent.parent
 
 SECRET_KEY = os.environ.get('SECRET_KEY', 'django-insecure-1234567890')
-DEBUG = True
 
+DEBUG = os.environ.get('DEBUG', 'False') == 'True'  # на Render False, локально можно выставить True через переменную среды
 
 from django.contrib.messages import constants as messages
 MESSAGE_TAGS = {
@@ -22,11 +22,12 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-	'tasks',
+    'tasks',
 ]
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
+    'whitenoise.middleware.WhiteNoiseMiddleware',  # ← добавили
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
@@ -65,21 +66,20 @@ DATABASES = {
     }
 }
 
+LOGIN_URL = '/accounts/login/'
 LOGIN_REDIRECT_URL = '/'
-LOGOUT_REDIRECT_URL = '/'
+LOGOUT_REDIRECT_URL = '/accounts/login/'
 
 AUTH_PASSWORD_VALIDATORS = []
 
 LANGUAGE_CODE = 'ru-ru'
-
 TIME_ZONE = 'Europe/Moscow'
-
 USE_I18N = True
-
 USE_TZ = True
 
-STATIC_URL = 'static/'
+STATIC_URL = '/static/'
 STATICFILES_DIRS = [BASE_DIR / 'static']
 STATIC_ROOT = BASE_DIR / 'staticfiles'
+STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
