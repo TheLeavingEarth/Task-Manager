@@ -1,48 +1,67 @@
+{% load static %}
 <!DOCTYPE html>
-
 <html lang="ru">
 <head>
-    <meta charset="UTF-8">
-    <title>Мои задачи</title>
-
-{% load static %}
-<link rel="stylesheet" href="{% static 'css/style.css' %}">
-<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-
-
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>{% block title %}Task Manager{% endblock %}</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Manrope:wght@600;700;800&display=swap" rel="stylesheet">
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.3/css/bootstrap.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="{% static 'css/style.css' %}">
 </head>
 <body>
-
-<!-- 🔥 Навбар -->
-
-<nav class="navbar navbar-expand-lg navbar-dark bg-dark">
-    <div class="container">
-        <a class="navbar-brand" href="/">Task Manager</a>
-
-
-    <div class="ms-auto">
+  <nav class="tm-navbar">
+    <div class="container d-flex align-items-center justify-content-between">
+      <div class="d-flex align-items-center gap-2">
+        <span class="brand-mark">T</span>
+        <div>
+          <div class="brand-name">Task Manager</div>
+          <div class="brand-sub">Внутренняя система управления задачами</div>
+        </div>
+      </div>
+      <div class="d-flex align-items-center gap-3">
+        <a href="{% url 'list' %}" style="color:var(--ink); font-weight:500;">Задачи</a>
         {% if user.is_authenticated %}
-            <span class="text-white me-3">👤 {{ user.username }}</span>
-            <form action="{% url 'logout' %}" method="post" class="d-inline">
-    {% csrf_token %}
-    <button type="submit" class="btn btn-outline-light btn-sm">Выйти</button>
-</form>
-        {% else %}
-            <a href="{% url 'login' %}" class="btn btn-outline-light btn-sm">Войти</a>
+        <div class="dropdown">
+          <button class="btn btn-sm btn-light dropdown-toggle" type="button" data-bs-toggle="dropdown">{{ user.username }}</button>
+          <ul class="dropdown-menu dropdown-menu-end">
+            <li>
+              <form method="post" action="{% url 'logout' %}" class="px-3">
+                {% csrf_token %}
+                <button type="submit" class="dropdown-item border-0 bg-transparent p-0 text-start w-100">Выйти</button>
+              </form>
+            </li>
+          </ul>
+        </div>
         {% endif %}
+      </div>
     </div>
-</div>
+  </nav>
 
-</nav>
+  <div class="toast-container position-fixed bottom-0 end-0 p-3" style="z-index: 1080;">
+    {% for message in messages %}
+    <div class="toast align-items-center text-white border-0 show" style="background: var(--accent);" role="alert">
+      <div class="d-flex">
+        <div class="toast-body">{{ message }}</div>
+        <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast"></button>
+      </div>
+    </div>
+    {% endfor %}
+  </div>
 
-<!-- 🔥 Контент -->
+  <main class="container py-4">
+    {% block content %}{% endblock %}
+  </main>
 
-<div class="container mt-5">
-    {% block content %}
-    {% endblock %}
-</div>
+  <footer class="container text-center text-muted py-4" style="font-size:.82rem;">
+    © {% now "Y" %} Task Manager — внутренняя система ООО «Интерсофт»
+  </footer>
 
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
-
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.3/js/bootstrap.bundle.min.js"></script>
+  <script>
+    document.querySelectorAll('.toast').forEach(t => {
+      setTimeout(() => bootstrap.Toast.getOrCreateInstance(t).hide(), 3500);
+    });
+  </script>
 </body>
 </html>

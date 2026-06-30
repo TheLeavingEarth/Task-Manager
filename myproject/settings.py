@@ -7,6 +7,12 @@ SECRET_KEY = os.environ.get('SECRET_KEY', 'django-insecure-1234567890')
 DEBUG = True
 
 
+from django.contrib.messages import constants as messages
+MESSAGE_TAGS = {
+    messages.SUCCESS: 'success',
+    messages.ERROR: 'danger',
+}
+
 ALLOWED_HOSTS = ['*']
 
 INSTALLED_APPS = [
@@ -73,6 +79,7 @@ USE_I18N = True
 USE_TZ = True
 
 STATIC_URL = 'static/'
+STATICFILES_DIRS = [BASE_DIR / 'static']
 STATIC_ROOT = BASE_DIR / 'staticfiles'
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
